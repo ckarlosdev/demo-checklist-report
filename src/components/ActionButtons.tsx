@@ -74,7 +74,7 @@ function ActionButtons({}: Props) {
               onClick={() => {
                 reset();
                 setIsLoaded(false);
-                // window.location.href = `https://ckarlosdev.github.io/binder-webapp/#/binder/${jobId}`;
+                window.location.href = `https://ckarlosdev.github.io/binder-webapp/#/binder/${jobId}`;
               }}
               variant="outline-primary"
               className="no-print"

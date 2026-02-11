@@ -38,7 +38,7 @@ function Title({ onPrint }: Props) {
               marginBottom: "10px",
             }}
           >
-            Daily Report
+            Demo Checklist Report
           </h2>
         </div>
         <div>
