@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ReportData } from "../types";
 import { api } from "./apiConfig";
-import useReportDataStore from "../stores/useReportDataStore";
+import { useContextStore } from "../stores/useContextStore";
 
 const queryDemoChecklist = async (
   demoChecklist: number,
@@ -32,18 +32,16 @@ const createDemoChecklist = async ({
 
 export function useSaveDemoChecklist() {
   const queryClient = useQueryClient();
-  const { setFullDailyReportData } = useReportDataStore();
+  const jobId = useContextStore((s) => s.jobId);
 
   return useMutation({
     mutationKey: ["save-report"],
     mutationFn: createDemoChecklist,
     onSuccess: (response) => {
-      const savedData = response.data;
       const newId = response.data.demoChecklistsId;
-
-      setFullDailyReportData(savedData);
       queryClient.invalidateQueries({ queryKey: ["demoChecklist", newId] });
       alert("Demo Checklist saved successfully.");
+      window.location.href = `https://ckarlosdev.github.io/binder-webapp/#/binder/${jobId}`;
     },
     onError: () => {
       alert("Error saving Demo Checklist. Please try again.");

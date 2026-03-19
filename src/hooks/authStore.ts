@@ -9,6 +9,7 @@ interface AuthState {
   login: (token: string, refreshToken: string) => void;
   logout: () => void;
   setUser: (user: User | null) => void;
+  clearAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -17,8 +18,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: !!localStorage.getItem("auth_token"),
 
   // token:
-  //   "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJhM2EzYmI4NS04YzMzLTQ5OGYtYmI4Mi04NGI5YjA1MGExMWYiLCJlbWFpbCI6ImNyYW1pcmV6QGhtYnJhbmR0LmNvbSIsInN1YiI6ImEzYTNiYjg1LThjMzMtNDk4Zi1iYjgyLTg0YjliMDUwYTExZiIsImlhdCI6MTc3MDMyMTkzNywiZXhwIjoxNzcwMzIyODM3fQ.2TgfP6cKgV47oPtNzdMju5QqFmKOoYg5rl4iKl5CU9A",
-  // refreshToken: "1e32b2b3-54bb-4fab-8d0c-b04ed597a2b4",
+  //   "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6ImNyYW1pcmV6QGhtYnJhbmR0LmNvbSIsImlhdCI6MTc3MzkzNTA1MCwiZXhwIjoxNzczOTM1OTUwfQ.W6bld1LxZHLGPHp_AOTYW8I5A_mJ1UPC3bm8LhzsrAo",
+  // refreshToken: "b5254ffa-5452-44da-ba80-5d0e9d48f7af.acc73641-90ab-4920-bdfa-f59c05991463",
   // isAuthenticated: true,
 
   user: null,
@@ -45,4 +46,5 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   setUser: (user) => set({ user }),
+  clearAuth: () => set({ user: null, isAuthenticated: false }),
 }));

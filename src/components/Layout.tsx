@@ -16,8 +16,9 @@ type Props = {};
 function Layout({}: Props) {
   const componenteRef = useRef(null);
   const [searchParams] = useSearchParams();
-  const { setIds, demoChecklistId, isLoaded, setIsLoaded } = useContextStore();
-  const { setFullDailyReportData } = useReportDataStore();
+  const { setIds, demoChecklistId, isLoaded, setIsLoaded, jobId } =
+    useContextStore();
+  const { setFullDailyReportData, reset } = useReportDataStore();
 
   const {
     data: report,
@@ -33,13 +34,22 @@ function Layout({}: Props) {
   }, [report]);
 
   useEffect(() => {
-    const jobId = searchParams.get("jobId");
-    const demoChecklistId = searchParams.get("demoChecklistId");
-    console.log("Search Params:", { jobId, demoChecklistId });
+    const jobIdParam = searchParams.get("jobId");
+    const demoChecklistIdParam = searchParams.get("demoChecklistId");
+    // console.log("Search Params:", { jobIdParam, demoChecklistIdParam });
+    const isNewAction = searchParams.get("action") === "new";
+    const isDifferentJob = jobId && Number(jobIdParam) !== jobId;
 
-    if (jobId || demoChecklistId) {
-      const storedJobId = Number(jobId);
-      const storedDemoChecklistId = Number(demoChecklistId);
+    if (
+      isNewAction ||
+      (jobIdParam && isDifferentJob && !demoChecklistIdParam)
+    ) {
+      reset();
+    }
+
+    if (jobIdParam || demoChecklistIdParam) {
+      const storedJobId = Number(jobIdParam);
+      const storedDemoChecklistId = Number(demoChecklistIdParam);
       if (!isNaN(storedJobId) || !isNaN(storedDemoChecklistId)) {
         setIds(storedJobId, storedDemoChecklistId);
       }

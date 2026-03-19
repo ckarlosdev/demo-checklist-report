@@ -3,13 +3,14 @@ import useReportDataStore from "../stores/useReportDataStore";
 import { useContextStore } from "../stores/useContextStore";
 // import useUser from "../hooks/useUser";
 import { useSaveDemoChecklist } from "../hooks/useDemoChecklist";
+import { useAuthStore } from "../hooks/authStore";
 
 type Props = {};
 
 function ActionButtons({}: Props) {
   const { jobId, setIsLoaded } = useContextStore();
-  // const { data: userData } = useUser();
   const { demoReport, reset, setFullDailyReportData } = useReportDataStore();
+  const { user: userAuth } = useAuthStore();
 
   const { mutate, isPending: isSaving } = useSaveDemoChecklist();
 
@@ -21,8 +22,6 @@ function ActionButtons({}: Props) {
     const payload = {
       ...demoReport,
       jobsId: jobId,
-      // createdBy: userData ? userData.email : "unknown",
-      // updatedBy: userData ? userData.email : "unknown",
     };
 
     console.log("Saving Demo Checklist with data:", payload);
@@ -48,6 +47,11 @@ function ActionButtons({}: Props) {
 
     return true;
   };
+
+  const isAuthorized = userAuth?.roles?.some(
+    (role) =>
+      role.name === "ROLE_SUPERVISOR" || role.name === "ROLE_SUPERINTENDENT",
+  );
 
   return (
     <>
@@ -94,7 +98,7 @@ function ActionButtons({}: Props) {
               onClick={() => {
                 handleSave();
               }}
-              disabled={isSaving}
+              disabled={isSaving || !isAuthorized}
               className="no-print"
             >
               {isSaving ? (
